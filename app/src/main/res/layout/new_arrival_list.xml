@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/black"
+        app:cardElevation="5dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/arrImg"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_search"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tcl"
+                android:id="@+id/title"
+                android:layout_below="@+id/arrImg"
+                android:includeFontPadding="false"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="old price"
+                android:id="@+id/old"
+                android:layout_below="@+id/title"
+                android:includeFontPadding="false"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="price"
+                android:id="@+id/price"
+                android:layout_below="@+id/old"
+                android:includeFontPadding="false"
+                android:layout_centerHorizontal="true"/>
+
+
+
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</layout>
