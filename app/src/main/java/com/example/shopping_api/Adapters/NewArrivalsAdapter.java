@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.shopping_api.R;
 
 import com.example.shopping_api.databinding.NewArrivalListBinding;
+import com.example.shopping_api.moduls.Feed;
 import com.example.shopping_api.moduls.NewArrivals;
 import com.squareup.picasso.Picasso;
 
