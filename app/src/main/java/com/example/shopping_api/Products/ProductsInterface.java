@@ -8,6 +8,7 @@ public interface ProductsInterface {
 
         void onSuccess(Feed feed);
         void onFailure();
+        void onError(Throwable t);
     }
 
     interface ProductsPresenter{

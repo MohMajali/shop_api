@@ -1,13 +1,25 @@
 package com.example.shopping_api.Products;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.drawablecolorchange.DrawableColorChange;
 import com.example.shopping_api.Adapters.BestBrandAdapter;
 import com.example.shopping_api.Adapters.BestDealsAdapter;
 import com.example.shopping_api.Adapters.BestSellingAdapter;
@@ -20,6 +32,7 @@ import com.example.shopping_api.Adapters.SecondSliderAdapter;
 import com.example.shopping_api.Adapters.ThirdSliderAdapter;
 import com.example.shopping_api.R;
 import com.example.shopping_api.databinding.ActivityMainBinding;
+import com.example.shopping_api.databinding.NavHeaderBinding;
 import com.example.shopping_api.moduls.BestSelling;
 import com.example.shopping_api.moduls.Category;
 import com.example.shopping_api.moduls.Deals;
@@ -33,12 +46,16 @@ import com.example.shopping_api.moduls.ThirdSlider;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 
+import androidx.appcompat.widget.Toolbar;
+
+
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity  implements ProductsInterface.ProductsView{
+public class MainActivity extends AppCompatActivity implements ProductsInterface.ProductsView {
 
     ProductsPresenter anInterface;
     ActivityMainBinding activityMainBinding;
+    NavHeaderBinding navHeaderBinding;
 
     ArrayList<LargePromotion> largePromotionList;
     ArrayList<Category> smallCategories;
@@ -62,18 +79,51 @@ public class MainActivity extends AppCompatActivity  implements ProductsInterfac
     SecondSliderAdapter secondSliderAdapter;
     ThirdSliderAdapter thirdSliderAdapter;
 
+    ActionBarDrawerToggle mActionBar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        activityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         anInterface = new ProductsPresenter(this);
 
+        //Drawers..etc
+        mActionBar = new ActionBarDrawerToggle(this, activityMainBinding.mainDrawerLayout, R.string.open, R.string.close);
+        activityMainBinding.mainDrawerLayout.addDrawerListener(mActionBar);
+        mActionBar.syncState();
 
+        //getSupportActionBar((Toolbar)activityMainBinding.myToolbar);
+        //getSupportActionBar((Toolbar)findViewById(R.id.my_toolbar));
+        setSupportActionBar((Toolbar) activityMainBinding.myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_menu);
+
+        //Default fragment to be displayed
+        changeFragmentDisplay(R.id.home);
 
         anInterface.feed();
 
 
+    }
+
+    private void changeFragmentDisplay(int item) {
+        Fragment fragment = null;
+
+        //hide naviagtion drawer
+//        mDrawerLayout.closeDrawer(Gravity.START);
+
+        activityMainBinding.mainDrawerLayout.closeDrawer(Gravity.START);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (mActionBar.onOptionsItemSelected(item)) {
+            return true;
+        } else {
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -83,11 +133,6 @@ public class MainActivity extends AppCompatActivity  implements ProductsInterfac
         String bestSelling = feed.getBest_selling_title();
         String brandShop = feed.getBrand_title();
         String dealsDay = feed.getDeals_title();
-
-
-
-
-
 
         largePromotionList = new ArrayList<>();
         smallCategories = new ArrayList<>();
@@ -112,29 +157,36 @@ public class MainActivity extends AppCompatActivity  implements ProductsInterfac
         thirdSliders.addAll(feed.getThird_slider());
 
         largePromotionAdapter = new LargePromotionsAdapter(getApplicationContext(), largePromotionList);
-        smallCategoryAdapter = new SmallCategoryAdapter(getApplicationContext() , smallCategories);
-        newsArrivalsAdapter = new NewArrivalsAdapter(getApplicationContext() , newArrivals);
-        firstSliderAdapter = new FirstSliderAdapter(getApplicationContext() , firstSliders);
+        smallCategoryAdapter = new SmallCategoryAdapter(getApplicationContext(), smallCategories);
+        newsArrivalsAdapter = new NewArrivalsAdapter(getApplicationContext(), newArrivals);
+        firstSliderAdapter = new FirstSliderAdapter(getApplicationContext(), firstSliders);
         secondSliderAdapter = new SecondSliderAdapter(getApplicationContext(), secondSliders);
-        largeCategoryAdapter = new LargeCategoryAdapter(getApplicationContext() , largeCategories);
-        bestSellingAdapter = new BestSellingAdapter(getApplicationContext() , bestSellings);
-        shopByBrandAdapter = new BestBrandAdapter(getApplicationContext() , shopByBrands);
-        bestDealsAdapter = new BestDealsAdapter(getApplicationContext() , deals);
-        thirdSliderAdapter = new ThirdSliderAdapter(getApplicationContext() , thirdSliders);
+        largeCategoryAdapter = new LargeCategoryAdapter(getApplicationContext(), largeCategories);
+        bestSellingAdapter = new BestSellingAdapter(getApplicationContext(), bestSellings);
+        shopByBrandAdapter = new BestBrandAdapter(getApplicationContext(), shopByBrands);
+        bestDealsAdapter = new BestDealsAdapter(getApplicationContext(), deals);
+        thirdSliderAdapter = new ThirdSliderAdapter(getApplicationContext(), thirdSliders);
 
-        checkingForCounts(newArrival , bestSelling , brandShop , dealsDay);
+        checkingForCounts(newArrival, bestSelling, brandShop, dealsDay);
 
         animationFirstSlider();
         animationSecondSlider();
         animationThirdSlider();
+        coloringItems(feed);
+        putInTexts();
     }
 
     @Override
     public void onFailure() {
-        Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
     }
 
-    public void animationFirstSlider(){
+    @Override
+    public void onError(Throwable t) {
+        Log.i("error", t.getLocalizedMessage());
+    }
+
+    public void animationFirstSlider() {
         //Animations of first Slider 1
 
         activityMainBinding.imageSlider.setIndicatorAnimation(IndicatorAnimationType.WORM);
@@ -142,7 +194,7 @@ public class MainActivity extends AppCompatActivity  implements ProductsInterfac
         activityMainBinding.imageSlider.startAutoCycle();
     }
 
-    public void animationSecondSlider(){
+    public void animationSecondSlider() {
         //Animations of first Slider 2
 
         activityMainBinding.imageSlider2.setIndicatorAnimation(IndicatorAnimationType.WORM);
@@ -150,7 +202,7 @@ public class MainActivity extends AppCompatActivity  implements ProductsInterfac
         activityMainBinding.imageSlider2.startAutoCycle();
     }
 
-    public void animationThirdSlider(){
+    public void animationThirdSlider() {
         //Animations of first Slider 2
 
         activityMainBinding.imageSlider3.setIndicatorAnimation(IndicatorAnimationType.WORM);
@@ -158,20 +210,20 @@ public class MainActivity extends AppCompatActivity  implements ProductsInterfac
         activityMainBinding.imageSlider3.startAutoCycle();
     }
 
-    public void checkingForCounts(String newArrival , String bestSelling , String brandShop , String dealsDay){
-        if(largePromotionAdapter.getItemCount() == 0){
+    public void checkingForCounts(String newArrival, String bestSelling, String brandShop, String dealsDay) {
+        if (largePromotionAdapter.getItemCount() == 0) {
             activityMainBinding.promoRecycle.setVisibility(View.GONE);
         } else {
             activityMainBinding.promoRecycle.setAdapter(largePromotionAdapter);
         }
 
-        if(smallCategoryAdapter.getItemCount() == 0){
+        if (smallCategoryAdapter.getItemCount() == 0) {
             activityMainBinding.smallView.setVisibility(View.GONE);
         } else {
             activityMainBinding.smallView.setAdapter(smallCategoryAdapter);
         }
 
-        if(newsArrivalsAdapter.getItemCount() == 0){
+        if (newsArrivalsAdapter.getItemCount() == 0) {
             activityMainBinding.arrivalsRecycle.setVisibility(View.GONE);
             activityMainBinding.newArrivals.setVisibility(View.GONE);
         } else {
@@ -179,25 +231,25 @@ public class MainActivity extends AppCompatActivity  implements ProductsInterfac
             activityMainBinding.newArrivals.setText(newArrival);
         }
 
-        if(firstSliderAdapter.getCount() == 0){
+        if (firstSliderAdapter.getCount() == 0) {
             activityMainBinding.imageSlider.setVisibility(View.GONE);
         } else {
             activityMainBinding.imageSlider.setSliderAdapter(firstSliderAdapter);
         }
 
-        if(secondSliderAdapter.getCount() == 0){
+        if (secondSliderAdapter.getCount() == 0) {
             activityMainBinding.imageSlider2.setVisibility(View.GONE);
         } else {
             activityMainBinding.imageSlider2.setSliderAdapter(secondSliderAdapter);
         }
 
-        if(largeCategoryAdapter.getItemCount() == 0){
+        if (largeCategoryAdapter.getItemCount() == 0) {
             activityMainBinding.largeView.setVisibility(View.GONE);
         } else {
             activityMainBinding.largeView.setAdapter(largeCategoryAdapter);
         }
 
-        if(bestSellingAdapter.getItemCount() == 0){
+        if (bestSellingAdapter.getItemCount() == 0) {
             activityMainBinding.bestSelling.setVisibility(View.GONE);
             activityMainBinding.bestSelling.setVisibility(View.GONE);
         } else {
@@ -205,7 +257,7 @@ public class MainActivity extends AppCompatActivity  implements ProductsInterfac
             activityMainBinding.bestsellingTxt.setText(bestSelling);
         }
 
-        if(shopByBrandAdapter.getItemCount() == 0){
+        if (shopByBrandAdapter.getItemCount() == 0) {
             activityMainBinding.brandSelling.setVisibility(View.GONE);
             activityMainBinding.brand.setVisibility(View.GONE);
         } else {
@@ -213,7 +265,7 @@ public class MainActivity extends AppCompatActivity  implements ProductsInterfac
             activityMainBinding.brand.setText(brandShop);
         }
 
-        if(bestDealsAdapter.getItemCount() == 0){
+        if (bestDealsAdapter.getItemCount() == 0) {
             activityMainBinding.dealsDay.setVisibility(View.GONE);
             activityMainBinding.dealsDay.setVisibility(View.GONE);
         } else {
@@ -221,11 +273,48 @@ public class MainActivity extends AppCompatActivity  implements ProductsInterfac
             activityMainBinding.deals.setText(dealsDay);
         }
 
-        if (thirdSliderAdapter.getCount() == 0){
+        if (thirdSliderAdapter.getCount() == 0) {
             activityMainBinding.imageSlider3.setVisibility(View.GONE);
         } else {
             activityMainBinding.imageSlider3.setSliderAdapter(thirdSliderAdapter);
         }
+
+    }
+
+    public void coloringItems(Feed feed) {
+        boolean isColor = feed.isShow_color();
+        String iconColor = feed.getColor();
+        int iconColor1 = Color.parseColor(iconColor);
+
+        int textColor = Color.parseColor("#808080");
+
+        if (isColor) {
+
+            //Text color changed
+            ColorStateList textList = new ColorStateList(
+                    new int[][]{new int[]{android.R.attr.state_checked}
+                    },
+                    new int[]{
+                            textColor
+                    }
+            );
+
+            //Icon color changed
+            ColorStateList iconList = new ColorStateList(
+                    new int[][]{new int[]{android.R.attr.state_checked}
+                    },
+                    new int[]{
+                            iconColor1
+                    }
+            );
+            activityMainBinding.mainNavView.setItemIconTintList(iconList);
+            activityMainBinding.mainNavView.setItemTextColor(textList);
+        }
+    }
+
+    public void putInTexts() {
+            navHeaderBinding = DataBindingUtil.inflate(getLayoutInflater(),
+                    R.layout.nav_header, activityMainBinding.mainNavView, false);
 
     }
 }
