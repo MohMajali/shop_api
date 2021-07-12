@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 29
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.example.shopping_api"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
@@ -51,4 +51,5 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.6.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation "androidx.cardview:cardview:1.0.0"
+    compile 'com.github.mathiazhagan01:DrawableColorChange:1.4'
 }

@@ -1,6 +1,7 @@
 package com.example.shopping_api.Products;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.shopping_api.moduls.Feed;
 import com.example.shopping_api.network.ApiClient;
@@ -46,6 +47,7 @@ public class ProductsPresenter implements ProductsInterface.ProductsPresenter {
             @Override
             public void onFailure(Call<Feed> call, Throwable t) {
                 productsView.onFailure();
+                productsView.onError(t);
             }
         });
 

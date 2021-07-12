@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
+
+    <item android:id="@+id/home"
+        android:title="Home"
+        android:icon="@drawable/ic_home"
+        android:checked="true"
+        />
+
+    <item android:title="Profile">
+        <menu>
+            <item
+                android:id="@+id/cart"
+                android:icon="@drawable/ic_cart"
+                android:title="Cart"
+                android:checked="true"
+                />
+            <item
+                android:id="@+id/favorites"
+                android:icon="@drawable/ic_favorite"
+                android:title="Favorites"
+                android:checked="true"/>
+        </menu>
+    </item>
+
+    <item android:title="Communication">
+        <menu>
+            <item
+                android:id="@+id/social"
+                android:icon="@drawable/ic_social"
+                android:title="Social Media"
+                android:checked="true"/>
+            <item
+                android:id="@+id/reviewUs"
+                android:icon="@drawable/ic_review"
+                android:title="Review Us"
+                android:checked="true"/>
+
+            <item
+                android:id="@+id/privacy"
+                android:icon="@drawable/ic_privacy"
+                android:title="Contact Us"
+                android:checked="true"/>
+
+            <item
+                android:id="@+id/share"
+                android:icon="@drawable/ic_share"
+                android:title="share with friends"
+                android:checked="true"/>
+
+        </menu>
+    </item>
+
+    <item android:title="Setting">
+        <menu>
+            <item
+                android:id="@+id/login"
+                android:icon="@drawable/ic_login"
+                android:title="Login"
+                android:checked="true"/>
+            <item
+                android:id="@+id/lang"
+                android:icon="@drawable/ic_lang"
+                android:title="Change Language"
+                android:checked="true"/>
+
+        </menu>
+    </item>
+
+</menu>
