@@ -1,6 +1,7 @@
 package com.example.shopping_api.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -8,10 +9,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.shopping_api.ProductDetails.AboutProduct;
 import com.example.shopping_api.R;
 
 import com.example.shopping_api.databinding.NewArrivalListBinding;
-import com.example.shopping_api.moduls.Feed;
 import com.example.shopping_api.moduls.NewArrivals;
 import com.squareup.picasso.Picasso;
 
@@ -46,6 +47,7 @@ public class NewArrivalsAdapter extends RecyclerView.Adapter<NewArrivalsAdapter.
         String title = newArrivals.getTitle();
         String oldPrice = newArrivals.getOld_price();
         String price = newArrivals.getPrice();
+        String id = newArrivals.getId();
 
         boolean isOld = newArrivals.isIs_old();
         final String IMAGE_URL = "https://backendapp.fikrajo.com" + img_url;
@@ -66,6 +68,12 @@ public class NewArrivalsAdapter extends RecyclerView.Adapter<NewArrivalsAdapter.
         }
 
         newArrivalListBinding.price.setText(price);
+
+        newArrivalListBinding.mainCard.setOnClickListener(v -> {
+            Intent intent = new Intent(holder.newArrivalListBinding.mainCard.getContext() , AboutProduct.class);
+            intent.putExtra("arrival-id",id);
+            holder.newArrivalListBinding.mainCard.getContext().startActivity(intent);
+        });
 
     }
 
