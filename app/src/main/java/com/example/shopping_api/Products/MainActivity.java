@@ -3,23 +3,22 @@ package com.example.shopping_api.Products;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
-import com.drawablecolorchange.DrawableColorChange;
 import com.example.shopping_api.Adapters.BestBrandAdapter;
 import com.example.shopping_api.Adapters.BestDealsAdapter;
 import com.example.shopping_api.Adapters.BestSellingAdapter;
@@ -45,9 +44,8 @@ import com.example.shopping_api.moduls.ShopByBrand;
 import com.example.shopping_api.moduls.ThirdSlider;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
-
 import androidx.appcompat.widget.Toolbar;
-
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import java.util.ArrayList;
 
@@ -94,9 +92,7 @@ public class MainActivity extends AppCompatActivity implements ProductsInterface
         activityMainBinding.mainDrawerLayout.addDrawerListener(mActionBar);
         mActionBar.syncState();
 
-        //getSupportActionBar((Toolbar)activityMainBinding.myToolbar);
-        //getSupportActionBar((Toolbar)findViewById(R.id.my_toolbar));
-        setSupportActionBar((Toolbar) activityMainBinding.myToolbar);
+        setSupportActionBar(activityMainBinding.myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_menu);
 
@@ -110,9 +106,6 @@ public class MainActivity extends AppCompatActivity implements ProductsInterface
 
     private void changeFragmentDisplay(int item) {
         Fragment fragment = null;
-
-        //hide naviagtion drawer
-//        mDrawerLayout.closeDrawer(Gravity.START);
 
         activityMainBinding.mainDrawerLayout.closeDrawer(Gravity.START);
     }
@@ -286,6 +279,10 @@ public class MainActivity extends AppCompatActivity implements ProductsInterface
         String iconColor = feed.getColor();
         int iconColor1 = Color.parseColor(iconColor);
 
+        int iconColor2 = Color.parseColor(iconColor);
+        ColorDrawable cd = new ColorDrawable();
+        cd.setColor(iconColor2);
+
         int textColor = Color.parseColor("#808080");
 
         if (isColor) {
@@ -309,6 +306,19 @@ public class MainActivity extends AppCompatActivity implements ProductsInterface
             );
             activityMainBinding.mainNavView.setItemIconTintList(iconList);
             activityMainBinding.mainNavView.setItemTextColor(textList);
+
+            final Drawable home = getResources().getDrawable(R.drawable.ic_home_menu);
+            home.setColorFilter(iconColor1 , PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(home);
+
+            final Drawable home2 = getResources().getDrawable(R.drawable.ic_cart);
+            home2.setColorFilter(iconColor1 , PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(home);
+
+            activityMainBinding.search.setDefaultHintTextColor(ColorStateList.valueOf(iconColor1));
+//            activityMainBinding.toolbarIv.setColorFilter(iconColor1);
+
+
         }
     }
 
