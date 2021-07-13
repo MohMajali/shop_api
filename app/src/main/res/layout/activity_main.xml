@@ -9,39 +9,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             tools:context=".Products.MainActivity">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/my_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/white"
-                android:elevation="4dp"
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                 app:layout_constraintBottom_toTopOf="@+id/scroll"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-                <TextView
-                    android:id="@+id/homeTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Home"
-                    android:textSize="20sp" />
-
-                <ImageView
-                    android:id="@+id/toolbar_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:src="@drawable/ic_shopping_cart" />
             </androidx.appcompat.widget.Toolbar>
+
+
 
             <FrameLayout
                 android:id="@+id/main_fragment_content"
@@ -56,6 +49,7 @@
                 android:layout_height="match_parent"
                 android:fillViewport="true"
                 android:scrollbars="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:layout_constraintTop_toBottomOf="@+id/my_toolbar">
 
                 <LinearLayout
@@ -64,18 +58,19 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/search"
+                        android:id="@+id/searchLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="30dp"
-                        android:layout_marginTop="60dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginEnd="30dp"
                         android:hint="Search for products"
                         app:startIconDrawable="@drawable/ic_search">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:id="@+id/search"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -226,6 +221,7 @@
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.navigation.NavigationView

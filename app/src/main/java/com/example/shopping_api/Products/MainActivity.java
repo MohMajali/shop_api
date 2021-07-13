@@ -3,11 +3,12 @@ package com.example.shopping_api.Products;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.Activity;
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -16,8 +17,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.shopping_api.Adapters.BestBrandAdapter;
 import com.example.shopping_api.Adapters.BestDealsAdapter;
@@ -44,8 +50,6 @@ import com.example.shopping_api.moduls.ShopByBrand;
 import com.example.shopping_api.moduls.ThirdSlider;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
-import androidx.appcompat.widget.Toolbar;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import java.util.ArrayList;
 
@@ -79,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements ProductsInterface
 
     ActionBarDrawerToggle mActionBar;
 
+    int count = 10;
+    TextView cartText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +103,14 @@ public class MainActivity extends AppCompatActivity implements ProductsInterface
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_menu);
 
+
         //Default fragment to be displayed
         changeFragmentDisplay(R.id.home);
 
         anInterface.feed();
+        setTitle("Home");
 
+        findViewById(android.R.id.content).setFocusableInTouchMode(true);
 
     }
 
@@ -108,6 +118,20 @@ public class MainActivity extends AppCompatActivity implements ProductsInterface
         Fragment fragment = null;
 
         activityMainBinding.mainDrawerLayout.closeDrawer(Gravity.START);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu , menu);
+
+        final MenuItem menuItem = menu.findItem(R.id.cart);
+        menuItem.setVisible(true);
+        View actionView = menuItem.getActionView();
+        cartText = actionView.findViewById(R.id.cart_badge);
+
+
+
+        return true;
     }
 
     @Override
@@ -119,6 +143,18 @@ public class MainActivity extends AppCompatActivity implements ProductsInterface
         return super.onOptionsItemSelected(item);
     }
 
+    public void setUpBadge(int cartCount){
+        String cart = cartText.getText().toString();
+
+        if(cart.isEmpty()){
+            if(count == 0){
+                cartText.setText("0");
+            } else {
+                cartText.setText(String.valueOf(cartCount));;
+            }
+        }
+    }
+
     @Override
     public void onSuccess(Feed feed) {
 
@@ -126,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements ProductsInterface
         String bestSelling = feed.getBest_selling_title();
         String brandShop = feed.getBrand_title();
         String dealsDay = feed.getDeals_title();
+        int cartCount = feed.getCart_count();
 
         largePromotionList = new ArrayList<>();
         smallCategories = new ArrayList<>();
@@ -161,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements ProductsInterface
         thirdSliderAdapter = new ThirdSliderAdapter(getApplicationContext(), thirdSliders);
 
         checkingForCounts(newArrival, bestSelling, brandShop, dealsDay);
+        setUpBadge(cartCount);
 
         animationFirstSlider();
         animationSecondSlider();
@@ -313,9 +351,9 @@ public class MainActivity extends AppCompatActivity implements ProductsInterface
 
             final Drawable home2 = getResources().getDrawable(R.drawable.ic_cart);
             home2.setColorFilter(iconColor1 , PorterDuff.Mode.SRC_ATOP);
-            getSupportActionBar().setHomeAsUpIndicator(home);
 
-            activityMainBinding.search.setDefaultHintTextColor(ColorStateList.valueOf(iconColor1));
+            activityMainBinding.searchLayout.setDefaultHintTextColor(ColorStateList.valueOf(iconColor1));
+            activityMainBinding.search.setTextColor(ColorStateList.valueOf(iconColor1));
 //            activityMainBinding.toolbarIv.setColorFilter(iconColor1);
 
 
@@ -327,4 +365,35 @@ public class MainActivity extends AppCompatActivity implements ProductsInterface
                     R.layout.nav_header, activityMainBinding.mainNavView, false);
 
     }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        View v = getCurrentFocus();
+
+        if (v != null && (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) &&
+                v instanceof EditText &&
+                !v.getClass().getName().startsWith("android.webkit.")) {
+            int[] sourceCoordinates = new int[2];
+            v.getLocationOnScreen(sourceCoordinates);
+            float x = ev.getRawX() + v.getLeft() - sourceCoordinates[0];
+            float y = ev.getRawY() + v.getTop() - sourceCoordinates[1];
+
+            if (x < v.getLeft() || x > v.getRight() || y < v.getTop() || y > v.getBottom()) {
+                hideKeyboard(this);
+            }
+
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+    private void hideKeyboard(Activity activity){
+        if (activity != null && activity.getWindow() != null) {
+            activity.getWindow().getDecorView();
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
+                findViewById(android.R.id.content).clearFocus();
+            }
+        }
+    }
+
 }

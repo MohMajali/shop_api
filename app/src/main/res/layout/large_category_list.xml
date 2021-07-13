@@ -37,7 +37,7 @@
                     android:id="@+id/largenames"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/catImg"
+                    android:layout_below="@+id/largeCatImg"
                     android:layout_centerHorizontal="true"
                     android:includeFontPadding="false"
                     android:text="Phones and tablets"
