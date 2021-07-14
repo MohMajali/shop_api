@@ -1,4 +1,6 @@
 package com.example.shopping_api.moduls;
 
-public class variation {
+public class Images {
+
+
 }

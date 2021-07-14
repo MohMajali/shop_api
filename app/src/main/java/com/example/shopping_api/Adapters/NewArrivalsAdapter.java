@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shopping_api.ProductDetails.AboutProduct;
+import com.example.shopping_api.ProductDetails.DetailsPresenter;
 import com.example.shopping_api.R;
 
 import com.example.shopping_api.databinding.NewArrivalListBinding;

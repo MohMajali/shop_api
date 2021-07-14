@@ -7,30 +7,30 @@ import java.util.List;
 public class DetailedProduct {
 
     @SerializedName("result")
-    private String result;
+    private Result result;
 
     @SerializedName("data")
-    private String data;
+    private ProductInfo data;
 
     @SerializedName("related")
     private List<Related> related;
 
     @SerializedName("other")
-    private String other;
+    private  Other other;
 
-    public String getResult() {
+    public Result getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(Result result) {
         this.result = result;
     }
 
-    public String getData() {
+    public ProductInfo getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(ProductInfo data) {
         this.data = data;
     }
 
@@ -42,11 +42,11 @@ public class DetailedProduct {
         this.related = related;
     }
 
-    public String getOther() {
+    public Other getOther() {
         return other;
     }
 
-    public void setOther(String other) {
+    public void setOther(Other other) {
         this.other = other;
     }
 }

@@ -13,7 +13,7 @@ import retrofit2.Response;
 
 public class ProductsPresenter implements ProductsInterface.ProductsPresenter {
 
-    private ApiService apiService = ApiClient.getClient().create(ApiService.class);
+    private final ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
     ProductsInterface.ProductsView productsView;
 
