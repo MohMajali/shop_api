@@ -20,7 +20,7 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
 
     Vairation vairation;
     ImageProductAdapter imageProductAdapter;
-    List<Vairation> images;
+    List<String> images;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +41,11 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
 
         images = new ArrayList<>();
 
-        //images.addAll();
+        images.addAll(vairation.getImages());
 
         imageProductAdapter = new ImageProductAdapter(getApplicationContext() , images);
+
+        aboutProductBinding.imageProdcute.setAdapter(imageProductAdapter);
 
 
 

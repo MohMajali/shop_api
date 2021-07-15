@@ -19,11 +19,12 @@ import java.util.List;
 public class ImageProductAdapter extends RecyclerView.Adapter<ImageProductAdapter.ViewHolder> {
 
     Context context;
-    List<Vairation> list;
+    List<String> list;
+    List<Vairation> vairations;
     ImageProListBinding imageProListBinding;
 
 
-    public ImageProductAdapter(Context context , List<Vairation> vairations){
+    public ImageProductAdapter(Context context , List<String> vairations){
         this.context = context;
         this.list = vairations;
     }
@@ -39,7 +40,7 @@ public class ImageProductAdapter extends RecyclerView.Adapter<ImageProductAdapte
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        Vairation vairation = list.get(position);
+        Vairation vairation = vairations.get(position);
         List<String> imgArray = vairation.getImages();
 
         String img1 = imgArray.get(0);
@@ -56,7 +57,7 @@ public class ImageProductAdapter extends RecyclerView.Adapter<ImageProductAdapte
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return vairations.size();
     }
 
 

@@ -3,6 +3,7 @@ package com.example.shopping_api.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -74,6 +75,8 @@ public class NewArrivalsAdapter extends RecyclerView.Adapter<NewArrivalsAdapter.
             Intent intent = new Intent(holder.newArrivalListBinding.mainCard.getContext() , AboutProduct.class);
             intent.putExtra("arrival-id",id);
             holder.newArrivalListBinding.mainCard.getContext().startActivity(intent);
+
+
         });
 
     }
