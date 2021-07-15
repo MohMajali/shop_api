@@ -17,10 +17,10 @@ public interface ApiService {
     Call<Feed> feed(@Path("user_id") String userId,
                     @Query("lang") String lang);
 
-    @FormUrlEncoded
-    @POST("api/get-product-details/{user_id/}"+"{product_id}")
+
+    @POST("api/get-product-details/{user_id}/{product_id}")
     Call<DetailedProduct> details(@Path("user_id") String userID,
-                                  @Field("product_id") String id,
+                                  @Path("product_id") String id,
                                   @Query("lang") String lang);
 
 

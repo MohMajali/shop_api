@@ -25,7 +25,7 @@ public class DetailsPresenter implements DetailsInterface.DetailsPresenter {
 
     @Override
     public void details(String id) {
-        Call<DetailedProduct> details = apiService.details("1" , id , "en");
+        Call<DetailedProduct> details = apiService.details("1" , id ,"en");
 
         details.enqueue(new Callback<DetailedProduct>() {
             @Override

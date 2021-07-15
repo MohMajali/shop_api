@@ -1,12 +1,15 @@
 package com.example.shopping_api.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.shopping_api.ProductDetails.AboutProduct;
 import com.example.shopping_api.R;
 import com.example.shopping_api.databinding.ImageProListBinding;
 import com.example.shopping_api.moduls.Vairation;
@@ -19,12 +22,11 @@ import java.util.List;
 public class ImageProductAdapter extends RecyclerView.Adapter<ImageProductAdapter.ViewHolder> {
 
     Context context;
-    List<String> list;
-    List<Vairation> vairations;
+    Vairation list;
     ImageProListBinding imageProListBinding;
 
 
-    public ImageProductAdapter(Context context , List<String> vairations){
+    public ImageProductAdapter(Context context , Vairation vairations){
         this.context = context;
         this.list = vairations;
     }
@@ -40,24 +42,39 @@ public class ImageProductAdapter extends RecyclerView.Adapter<ImageProductAdapte
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        Vairation vairation = vairations.get(position);
-        List<String> imgArray = vairation.getImages();
+        List<String> imgArray = list.getImages();
 
-        String img1 = imgArray.get(0);
+        String img1 = imgArray.get(position);
+        Log.i("size" , String.valueOf(imgArray.size()));
+        Log.i("lenght" , imgArray.get(position));
+        Log.i("img1" , img1);
+
+        String imgIntent = imgArray.get(0);
+        Log.i("firstImg" , imgIntent);
+
+        /*holder.imageProListBinding.largImgPro.setOnClickListener(v -> {
+            Intent intent = new Intent(holder.imageProListBinding.largImgPro.getContext() , AboutProduct.class);
+            intent.putExtra("img" , imgIntent);
+            holder.imageProListBinding.largImgPro.getContext().startActivity(intent);
+        });*/
+
+
+
         final String IMG_URL = "https://backendapp.fikrajo.com" +img1;
 
-        if (img1.isEmpty()){
-            imageProListBinding.imgPro.setImageResource(R.drawable.ic_home);
-        } else {
-            Picasso.with(holder.imageProListBinding.imgPro.getContext()).load(IMG_URL).error(R.drawable.ic_cart).into(
-                    holder.imageProListBinding.imgPro);
-        }
+            if (img1.isEmpty()){
+                imageProListBinding.largImgPro.setImageResource(R.drawable.ic_home);
+            } else {
+                Picasso.with(holder.imageProListBinding.largImgPro.getContext()).load(IMG_URL).error(R.drawable.ic_cart).into(
+                        holder.imageProListBinding.largImgPro);
+            }
+
 
     }
 
     @Override
     public int getItemCount() {
-        return vairations.size();
+        return list.getImages().size();
     }
 
 
