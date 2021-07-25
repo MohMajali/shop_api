@@ -13,7 +13,7 @@ import com.example.shopping_api.R;
 import com.example.shopping_api.databinding.ActivityAboutProductBinding;
 import com.example.shopping_api.moduls.DetailedProduct;
 import com.example.shopping_api.moduls.ProductInfo;
-import com.example.shopping_api.moduls.Vairation;
+import com.example.shopping_api.moduls.SizeAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -31,6 +31,7 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
     ShortDiscAdapter shortDiscAdapter;
     DetailsAdapter detailsAdapter;
     OptionsAdapter optionsAdapter;
+    SizeAdapter sizeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +59,13 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
         shortDiscAdapter = new ShortDiscAdapter(getApplicationContext() , productInfo);
         detailsAdapter = new DetailsAdapter(getApplicationContext() , productInfo);
         optionsAdapter = new OptionsAdapter(getApplicationContext(),detailedProduct.getData().bigVariation());
+        sizeAdapter = new SizeAdapter(getApplicationContext() , detailedProduct.getData().bigVariation().get(0).getVariations());
 
         aboutProductBinding.imageProdcute.setAdapter(imageProductAdapter);
         aboutProductBinding.shotDisc.setAdapter(shortDiscAdapter);
         aboutProductBinding.details.setAdapter(detailsAdapter);
         aboutProductBinding.colors.setAdapter(optionsAdapter);
+        aboutProductBinding.options.setAdapter(sizeAdapter);
 
 
     }

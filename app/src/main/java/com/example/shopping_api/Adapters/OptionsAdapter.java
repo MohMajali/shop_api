@@ -3,16 +3,17 @@ package com.example.shopping_api.Adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.shopping_api.databinding.NewArrivalListBinding;
 import com.example.shopping_api.databinding.OptionsListBinding;
 import com.example.shopping_api.moduls.BigVariation;
-import com.example.shopping_api.moduls.Vairation;
+import com.example.shopping_api.moduls.SizeAdapter;
+import com.example.shopping_api.moduls.Variation;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -22,8 +23,14 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.ViewHold
 
     Context context;
     List<BigVariation> list;
-
     OptionsListBinding binding;
+    List<Variation> variationList;
+
+    String id;
+
+    SizeAdapter sizeAdapter;
+
+    public OptionsAdapter(){}
 
     public OptionsAdapter(Context context , List<BigVariation> vairations){
         this.context = context;
@@ -46,9 +53,24 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.ViewHold
         String color = bigVariation.getColor();
         int imgColor = Color.parseColor(color);
 
-        Log.i("color" , color);
+        String varColor = bigVariation.getVariations().get(0).getColor();
+        int smallVarColor = Color.parseColor(varColor);
+
+        id = bigVariation.getVariations().get(0).getId();
 
         binding.imgColor.setBackgroundColor(imgColor);
+        binding.imgColor.setOnClickListener(v -> {
+
+            if(smallVarColor == imgColor){
+                sizeAdapter = new SizeAdapter();
+
+                //Options adapter
+                notifyDataSetChanged();
+                //Size adapter
+
+                sizeAdapter.notifyDataSetChanged();
+            } else {}
+        });
 
     }
 
@@ -57,7 +79,7 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.ViewHold
         return list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         OptionsListBinding optionsListBinding;
 
         public ViewHolder(@NonNull OptionsListBinding itemView) {

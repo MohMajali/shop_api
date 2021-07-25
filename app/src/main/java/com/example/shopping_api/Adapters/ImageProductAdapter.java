@@ -1,7 +1,6 @@
 package com.example.shopping_api.Adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -9,10 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.shopping_api.ProductDetails.AboutProduct;
 import com.example.shopping_api.R;
 import com.example.shopping_api.databinding.ImageProListBinding;
-import com.example.shopping_api.moduls.Vairation;
+import com.example.shopping_api.moduls.Variation;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,11 +20,11 @@ import java.util.List;
 public class ImageProductAdapter extends RecyclerView.Adapter<ImageProductAdapter.ViewHolder> {
 
     Context context;
-    Vairation list;
+    Variation list;
     ImageProListBinding imageProListBinding;
 
 
-    public ImageProductAdapter(Context context , Vairation vairations){
+    public ImageProductAdapter(Context context , Variation vairations){
         this.context = context;
         this.list = vairations;
     }

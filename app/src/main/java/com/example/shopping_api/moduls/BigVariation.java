@@ -10,7 +10,7 @@ public class BigVariation {
     private String color;
 
     @SerializedName("variations")
-    private List<Vairation> variations;
+    private List<Variation> variations;
 
     public String getColor() {
         return color;
@@ -20,11 +20,11 @@ public class BigVariation {
         this.color = color;
     }
 
-    public List<Vairation> getVariations() {
+    public List<Variation> getVariations() {
         return variations;
     }
 
-    public void setVariations(List<Vairation> variations) {
+    public void setVariations(List<Variation> variations) {
         this.variations = variations;
     }
 }

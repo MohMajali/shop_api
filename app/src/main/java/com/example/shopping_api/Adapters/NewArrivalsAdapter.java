@@ -74,7 +74,6 @@ public class NewArrivalsAdapter extends RecyclerView.Adapter<NewArrivalsAdapter.
         newArrivalListBinding.mainCard.setOnClickListener(v -> {
             Intent intent = new Intent(holder.newArrivalListBinding.mainCard.getContext() , AboutProduct.class);
             intent.putExtra("arrival-id",id);
-            Log.i("idss" , id);
             intent.putExtra("img",IMAGE_URL);
             holder.newArrivalListBinding.mainCard.getContext().startActivity(intent);
 
