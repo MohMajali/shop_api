@@ -2,19 +2,14 @@ package com.example.shopping_api.Adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
-import android.util.Size;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.example.shopping_api.ProductDetails.OnClick;
 import com.example.shopping_api.databinding.OptionsListBinding;
 import com.example.shopping_api.moduls.BigVariation;
-import com.example.shopping_api.moduls.SizeAdapter;
-import com.example.shopping_api.moduls.Variation;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -24,17 +19,14 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.ViewHold
     Context context;
     List<BigVariation> list;
     OptionsListBinding binding;
-    List<Variation> variationList;
-
-    String id;
-
-    SizeAdapter sizeAdapter;
+    OnClick onClickItem;
 
     public OptionsAdapter(){}
 
-    public OptionsAdapter(Context context , List<BigVariation> vairations){
+    public OptionsAdapter(Context context , List<BigVariation> vairations, OnClick onClickItem){
         this.context = context;
         this.list = vairations;
+        this.onClickItem = onClickItem;
     }
 
     @NonNull
@@ -43,7 +35,7 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.ViewHold
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         binding = OptionsListBinding.inflate(layoutInflater , parent , false);
-        return new ViewHolder(binding);
+        return new ViewHolder(binding, onClickItem);
     }
 
     @Override
@@ -53,25 +45,12 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.ViewHold
         String color = bigVariation.getColor();
         int imgColor = Color.parseColor(color);
 
-        String varColor = bigVariation.getVariations().get(0).getColor();
-        int smallVarColor = Color.parseColor(varColor);
-
-        id = bigVariation.getVariations().get(0).getId();
-
         binding.imgColor.setBackgroundColor(imgColor);
-        binding.imgColor.setOnClickListener(v -> {
 
-            if(smallVarColor == imgColor){
-                sizeAdapter = new SizeAdapter();
+    }
 
-                //Options adapter
-                notifyDataSetChanged();
-                //Size adapter
-
-                sizeAdapter.notifyDataSetChanged();
-            } else {}
-        });
-
+    public BigVariation getBigVariation(int position){
+        return list.get(position);
     }
 
     @Override
@@ -79,12 +58,24 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.ViewHold
         return list.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         OptionsListBinding optionsListBinding;
+        OnClick onClickItem;
 
-        public ViewHolder(@NonNull OptionsListBinding itemView) {
-            super(itemView.getRoot());
-            this.optionsListBinding = itemView;
+        public ViewHolder(@NonNull OptionsListBinding optionsListBinding , OnClick onClickItem) {
+            super(optionsListBinding.getRoot());
+            this.optionsListBinding = optionsListBinding;
+            this.onClickItem = onClickItem;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(onClickItem != null){
+                if(getAdapterPosition() != -1){
+                    onClickItem.onClickListener(new OptionsAdapter() , getAdapterPosition());
+                }
+            }
         }
     }
 }

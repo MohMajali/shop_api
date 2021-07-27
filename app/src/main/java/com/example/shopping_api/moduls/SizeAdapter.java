@@ -1,15 +1,13 @@
 package com.example.shopping_api.moduls;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.shopping_api.Adapters.OptionsAdapter;
+import com.example.shopping_api.ProductDetails.OnClick;
 import com.example.shopping_api.databinding.SizeListBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,16 +19,15 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder> {
     Context context;
     SizeListBinding listBinding;
     List<Variation> list;
-
+    OnClick onClickItem;
     Variation variation;
-
-    OptionsAdapter optionsAdapter;
 
     public SizeAdapter(){}
 
-    public SizeAdapter(Context context , List<Variation> variationList){
+    public SizeAdapter(Context context , List<Variation> variationList, OnClick onClickItem){
         this.context = context;
         this.list = variationList;
+        this.onClickItem = onClickItem;
     }
 
     @NonNull
@@ -40,15 +37,16 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder> {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         listBinding = SizeListBinding.inflate(layoutInflater , parent , false);
 
-        return new ViewHolder(listBinding);
+        return new ViewHolder(listBinding, onClickItem);
     }
 
+    private static final String TAG = "SizeAdapter";
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         variation = list.get(position);
         String size = variation.getSize();
+        Log.e(TAG, "onBindViewHolder: "+size );
         listBinding.size.setText(size);
-
     }
 
     @Override
@@ -56,12 +54,30 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder> {
         return list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        SizeListBinding sizeListBinding;
+    public void setNewSize(List<Variation> variationList){
+        this.list = variationList;
+    }
 
-        public ViewHolder(@NonNull SizeListBinding itemView){
-            super(itemView.getRoot());
-            this.sizeListBinding = itemView;
+
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        SizeListBinding sizeListBinding;
+        OnClick onClickItem;
+
+        public ViewHolder(@NonNull SizeListBinding sizeListBinding , OnClick onClickItem) {
+            super(sizeListBinding.getRoot());
+            this.sizeListBinding = sizeListBinding;
+            this.onClickItem = onClickItem;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(onClickItem != null){
+                if(getAdapterPosition() != -1){
+                    onClickItem.onClickListener(new SizeAdapter() , getAdapterPosition());
+                }
+            }
         }
     }
 }
