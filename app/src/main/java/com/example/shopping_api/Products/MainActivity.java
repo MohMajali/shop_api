@@ -29,6 +29,7 @@ import com.example.shopping_api.Adapters.BestBrandAdapter;
 import com.example.shopping_api.Adapters.BestDealsAdapter;
 import com.example.shopping_api.Adapters.BestSellingAdapter;
 import com.example.shopping_api.Adapters.LargeCategoryAdapter;
+import com.example.shopping_api.Adapters.RatingAdapter;
 import com.example.shopping_api.Adapters.SmallCategoryAdapter;
 import com.example.shopping_api.Adapters.FirstSliderAdapter;
 import com.example.shopping_api.Adapters.LargePromotionsAdapter;

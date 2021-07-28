@@ -1,4 +1,4 @@
-package com.example.shopping_api.moduls;
+package com.example.shopping_api.Adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.shopping_api.ProductDetails.OnClick;
 import com.example.shopping_api.databinding.SizeListBinding;
+import com.example.shopping_api.moduls.Variation;
 
 import org.jetbrains.annotations.NotNull;
 
