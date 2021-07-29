@@ -57,6 +57,7 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder> {
 
     public void setNewSize(List<Variation> variationList){
         this.list = variationList;
+        listBinding.size.setText(variationList.get(0).getSize());
     }
 
 

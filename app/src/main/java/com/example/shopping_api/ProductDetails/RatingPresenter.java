@@ -1,4 +1,7 @@
+/*
 package com.example.shopping_api.ProductDetails;
+
+import android.util.Log;
 
 import com.example.shopping_api.moduls.Rating;
 import com.example.shopping_api.network.ApiClient;
@@ -43,3 +46,4 @@ public class RatingPresenter implements RatingInterface.RatingPresenter {
         });
     }
 }
+*/

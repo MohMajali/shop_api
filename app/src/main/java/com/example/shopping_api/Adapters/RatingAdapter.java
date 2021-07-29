@@ -1,3 +1,4 @@
+/*
 package com.example.shopping_api.Adapters;
 
 import android.annotation.SuppressLint;
@@ -78,9 +79,11 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
     }
 
     public void updateRating(List<Rating> ratings) {
-        /*list.clear();
+        */
+/*list.clear();
         list.addAll(ratings);
-        this.notifyDataSetChanged();*/
+        this.notifyDataSetChanged();*//*
+
         this.list = ratings;
     }
 
@@ -100,3 +103,4 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingAdapter.ViewHolder
         }
     }
 }
+*/

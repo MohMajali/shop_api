@@ -1,7 +1,11 @@
 package com.example.shopping_api.network;
 
+import com.example.shopping_api.moduls.BaseFavorite;
+import com.example.shopping_api.moduls.BaseRating;
 import com.example.shopping_api.moduls.DetailedProduct;
+import com.example.shopping_api.moduls.FavoriteData;
 import com.example.shopping_api.moduls.Feed;
+import com.example.shopping_api.moduls.Other;
 import com.example.shopping_api.moduls.Rating;
 
 import retrofit2.Call;
@@ -25,10 +29,15 @@ public interface ApiService {
                                   @Query("lang") String lang);
 
     @POST("api/rating/{user_id}/{product_id}/{rate_value}")
-    Call<Rating> rating(@Path("user_id") String userID,
-                        @Path("product_id") String id,
-                        @Path("rate_value") float rate,
-                        @Query("lang") String lang);
+    Call<BaseRating> rating(@Path("user_id") String userID,
+                            @Path("product_id") String id,
+                            @Path("rate_value") float rate,
+                            @Query("lang") String lang);
+
+    @POST("api/favorite/{user_id}/{product_id}")
+    Call<BaseFavorite> favorite(@Path("user_id") String userID,
+                                @Path("product_id") String id,
+                                @Query("lang") String lang);
 
 
 }

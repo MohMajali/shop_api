@@ -1,3 +1,4 @@
+/*
 package com.example.shopping_api.ProductDetails;
 
 import com.example.shopping_api.databinding.RatingListBinding;
@@ -17,3 +18,4 @@ public interface RatingInterface {
         void rating(String id , float rate);
     }
 }
+*/

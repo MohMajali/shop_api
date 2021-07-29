@@ -16,18 +16,13 @@ import java.util.List;
 
 public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.ViewHolder>{
 
-    Context context;
+
     List<BigVariation> list;
     OptionsListBinding binding;
     OnClick onClickItem;
 
     public OptionsAdapter(){}
 
-    public OptionsAdapter(Context context , List<BigVariation> vairations, OnClick onClickItem){
-        this.context = context;
-        this.list = vairations;
-        this.onClickItem = onClickItem;
-    }
 
     @NonNull
     @NotNull
@@ -57,6 +52,18 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.ViewHold
     public int getItemCount() {
         return list.size();
     }
+
+
+
+    public  void setBigVariation(List<BigVariation> list)
+    {
+        this.list=list;
+        notifyDataSetChanged();
+    }
+
+
+
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         OptionsListBinding optionsListBinding;
