@@ -60,6 +60,10 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder> {
         listBinding.size.setText(variationList.get(0).getSize());
     }
 
+    public Variation getVariation(int position){
+        return list.get(position);
+    }
+
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

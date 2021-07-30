@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.shopping_api.ProductDetails.OnClick;
+import com.example.shopping_api.R;
 import com.example.shopping_api.databinding.OptionsListBinding;
 import com.example.shopping_api.moduls.BigVariation;
 import org.jetbrains.annotations.NotNull;
@@ -16,13 +17,17 @@ import java.util.List;
 
 public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.ViewHolder>{
 
-
+    Context context;
     List<BigVariation> list;
     OptionsListBinding binding;
     OnClick onClickItem;
 
     public OptionsAdapter(){}
 
+    public OptionsAdapter(Context context , List<BigVariation> bigVariations){
+        this.context = context;
+        this.list = bigVariations;
+    }
 
     @NonNull
     @NotNull
@@ -44,13 +49,30 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.ViewHold
 
     }
 
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return R.layout.options_list;
+    }
+
     public BigVariation getBigVariation(int position){
         return list.get(position);
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        if(list != null){
+            return list.size();
+        }
+        return 0;
+    }
+
+    public void setColorClickListener(OnClick onClickItem){
+        this.onClickItem = onClickItem;
     }
 
 
