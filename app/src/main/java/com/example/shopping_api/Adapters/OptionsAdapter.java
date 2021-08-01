@@ -17,17 +17,10 @@ import java.util.List;
 
 public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.ViewHolder>{
 
-    Context context;
     List<BigVariation> list;
     OptionsListBinding binding;
     OnClick onClickItem;
 
-    public OptionsAdapter(){}
-
-    public OptionsAdapter(Context context , List<BigVariation> bigVariations){
-        this.context = context;
-        this.list = bigVariations;
-    }
 
     @NonNull
     @NotNull
@@ -42,11 +35,7 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.ViewHold
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         BigVariation bigVariation = list.get(position);
 
-        String color = bigVariation.getColor();
-        int imgColor = Color.parseColor(color);
-
-        binding.imgColor.setBackgroundColor(imgColor);
-
+        holder.bing(bigVariation);
     }
 
     @Override
@@ -83,19 +72,24 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-
-
-
-
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         OptionsListBinding optionsListBinding;
         OnClick onClickItem;
 
         public ViewHolder(@NonNull OptionsListBinding optionsListBinding , OnClick onClickItem) {
             super(optionsListBinding.getRoot());
+
             this.optionsListBinding = optionsListBinding;
             this.onClickItem = onClickItem;
+
             itemView.setOnClickListener(this);
+        }
+
+        public void bing(BigVariation bigVariation){
+            String colorString = bigVariation.getColor();
+            int color = Color.parseColor(colorString);
+
+            optionsListBinding.imgColor.setBackgroundColor(color);
         }
 
         @Override

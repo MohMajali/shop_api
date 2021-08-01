@@ -3,11 +3,13 @@ package com.example.shopping_api.Adapters;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.shopping_api.ProductDetails.OnClick;
 import com.example.shopping_api.R;
 import com.example.shopping_api.databinding.ImageProListBinding;
 import com.example.shopping_api.moduls.Variation;
@@ -19,15 +21,16 @@ import java.util.List;
 
 public class ImageProductAdapter extends RecyclerView.Adapter<ImageProductAdapter.ViewHolder> {
 
-    Context context;
+
     Variation list;
     ImageProListBinding imageProListBinding;
+    OnClick onClick;
 
 
-    public ImageProductAdapter(Context context , Variation vairations){
+    /*public ImageProductAdapter(Context context , Variation vairations){
         this.context = context;
         this.list = vairations;
-    }
+    }*/
 
     @NonNull
     @NotNull
@@ -35,53 +38,80 @@ public class ImageProductAdapter extends RecyclerView.Adapter<ImageProductAdapte
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         imageProListBinding = imageProListBinding.inflate(layoutInflater , parent , false);
-        return new ViewHolder(imageProListBinding);
+        return new ViewHolder(imageProListBinding , onClick);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
+
         List<String> imgArray = list.getImages();
+        holder.bind(imgArray,position);
 
-        String img1 = imgArray.get(position);
-        Log.i("size" , String.valueOf(imgArray.size()));
-        Log.i("lenght" , imgArray.get(position));
-        Log.i("img1" , img1);
+    }
 
-        String imgIntent = imgArray.get(0);
-        Log.i("firstImg" , imgIntent);
+    @Override
+    public int getItemCount() {
+        if(list != null){
+            return list.getImages().size();
+        }
+        return 0;
+    }
 
-        /*holder.imageProListBinding.largImgPro.setOnClickListener(v -> {
-            Intent intent = new Intent(holder.imageProListBinding.largImgPro.getContext() , AboutProduct.class);
-            intent.putExtra("img" , imgIntent);
-            holder.imageProListBinding.largImgPro.getContext().startActivity(intent);
-        });*/
+    public void setImages(Variation variation){
+        this.list = variation;
+        notifyDataSetChanged();
+    }
+
+    public void onClick(OnClick onClick){
+        this.onClick = onClick;
+    }
 
 
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        final String IMG_URL = "https://backendapp.fikrajo.com" +img1;
+        ImageProListBinding imageProListBinding;
+        OnClick onClick;
+        public ViewHolder(@NonNull ImageProListBinding imageProListBinding , OnClick onClick){
+            super(imageProListBinding.getRoot());
+
+            this.imageProListBinding = imageProListBinding;
+            this.onClick = onClick;
+            itemView.setOnClickListener(this);
+        }
+
+        public void bind(List<String> variation, int position){
+
+            List<String> img = variation;
+            String img1 = img.get(position);
+            final String IMG_URL = "https://backendapp.fikrajo.com" +img1;
+
+            if(img1.isEmpty()){
+                imageProListBinding.largImgPro.setImageResource(R.drawable.ic_home);
+            } else {
+                Picasso.with(imageProListBinding.largImgPro.getContext()).load(IMG_URL).error(R.drawable.ic_cart).
+                        into(imageProListBinding.largImgPro);
+            }
+            /*String img1 = imgArray.get(position);
+
+            String imgIntent = imgArray.get(0);
+
+            final String IMG_URL = "https://backendapp.fikrajo.com" +img1;
 
             if (img1.isEmpty()){
                 imageProListBinding.largImgPro.setImageResource(R.drawable.ic_home);
             } else {
                 Picasso.with(holder.imageProListBinding.largImgPro.getContext()).load(IMG_URL).error(R.drawable.ic_cart).into(
                         holder.imageProListBinding.largImgPro);
+            }*/
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(onClick != null){
+                if(getAdapterPosition() != -1){
+                    onClick.onClickListener(new ImageProductAdapter() , getAdapterPosition());
+                }
             }
-
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return list.getImages().size();
-    }
-
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        ImageProListBinding imageProListBinding;
-        public ViewHolder(@NonNull ImageProListBinding itemView){
-            super(itemView.getRoot());
-            this.imageProListBinding = itemView;
         }
     }
 }

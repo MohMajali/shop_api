@@ -15,6 +15,7 @@ import com.example.shopping_api.databinding.ActivityAboutProductBinding;
 import com.example.shopping_api.moduls.BigVariation;
 import com.example.shopping_api.moduls.DetailedProduct;
 import com.example.shopping_api.moduls.FavoriteData;
+import com.example.shopping_api.moduls.Feed;
 import com.example.shopping_api.moduls.ProductInfo;
 import com.example.shopping_api.moduls.Rating;
 import com.example.shopping_api.Adapters.SizeAdapter;
@@ -40,6 +41,7 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
     float rateValue;
 
     BigVariation bigVariation;
+    Feed feed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,11 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
         String imgUrl = getIntent().getStringExtra("img");
         Picasso.with(getApplicationContext()).load(imgUrl).into(aboutProductBinding.bigImage);
         detailsPresenter.details(id);
+
+        setUpImagesAdapter();
         setUpOptionAdapter();
+        setUpSizeAdapter();
+        setUpShortDiscAdapter();
 
         aboutProductBinding.rate.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> rateValue = ratingBar.getRating());
 
@@ -64,36 +70,49 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
             detailsPresenter.favorite(id);
         });
 
+        feed = new Feed();
+
 
     }
 
     private  void setUpOptionAdapter(){
-       // optionsAdapter.setColorClickListener(this);
+        optionsAdapter = new OptionsAdapter();
+        aboutProductBinding.colors.setAdapter(optionsAdapter);
+       optionsAdapter.setColorClickListener(this);
+    }
+
+    private void setUpSizeAdapter(){
+        sizeAdapter = new SizeAdapter();
+        aboutProductBinding.sizes.setAdapter(sizeAdapter);
+    }
+
+    private void setUpImagesAdapter(){
+        imageProductAdapter = new ImageProductAdapter();
+        aboutProductBinding.imageProdcute.setAdapter(imageProductAdapter);
+    }
+
+    private void setUpShortDiscAdapter(){
+        shortDiscAdapter = new ShortDiscAdapter();
+        aboutProductBinding.shotDisc.setAdapter(shortDiscAdapter);
     }
     @Override
     public void onSuccess(DetailedProduct detailedProduct) {
 
-        imageProductAdapter = new ImageProductAdapter(getApplicationContext(), detailedProduct.getData().bigVariation().get(0)
-                .getVariations().get(0));
+        imageProductAdapter.setImages(detailedProduct.getData().bigVariation().get(0).getVariations().get(0));
 
         productInfo = new ArrayList<>();
         productInfo.add(detailedProduct.getData());
+        //shortDiscAdapter.setShortDisc(productInfo);
 
         ratings = new ArrayList<>();
         ratings.add(detailedProduct.getOther().getRating());
 
-        shortDiscAdapter = new ShortDiscAdapter(getApplicationContext() , productInfo);
         detailsAdapter = new DetailsAdapter(getApplicationContext() , productInfo);
-        optionsAdapter = new OptionsAdapter(getApplicationContext() , detailedProduct.getData().bigVariation());
-        sizeAdapter = new SizeAdapter(getApplicationContext() , detailedProduct.getData().bigVariation().get(0).getVariations() ,this);
 
         aboutProductBinding.imageProdcute.setAdapter(imageProductAdapter);
-        aboutProductBinding.shotDisc.setAdapter(shortDiscAdapter);
         aboutProductBinding.details.setAdapter(detailsAdapter);
-        aboutProductBinding.colors.setAdapter(optionsAdapter);
-        optionsAdapter.setColorClickListener(this);
-        aboutProductBinding.options.setAdapter(sizeAdapter);
-        //optionsAdapter.setBigVariation(detailedProduct.getData().getBigVariation());
+        optionsAdapter.setBigVariation(detailedProduct.getData().getBigVariation());
+        sizeAdapter.setNewSize(detailedProduct.getData().bigVariation().get(0).getVariations());
 
         getFirstRating(detailedProduct.getOther().getRating());
 
@@ -109,11 +128,6 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
         Log.i("thorw" , t.toString());
     }
 
-    @Override
-    public void sizeSuccess(Variation variation) {
-
-        //aboutProductBinding.options.setAdapter(sizeAdapter);
-    }
 
     @Override
     public void ratingSuccess(Rating rating) {
@@ -198,7 +212,9 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
         if(adapter instanceof OptionsAdapter){
             bigVariation = optionsAdapter.getBigVariation(position);
             sizeAdapter.setNewSize(bigVariation.getVariations());
-            sizeAdapter.notifyDataSetChanged();
+            imageProductAdapter.setImages(bigVariation.getVariations().get(0));
+
+            shortDiscAdapter.setPrice(productInfo);
 
         } else if(adapter instanceof SizeAdapter){
             Toast.makeText(getApplicationContext(),String.valueOf(position),Toast.LENGTH_LONG).show();

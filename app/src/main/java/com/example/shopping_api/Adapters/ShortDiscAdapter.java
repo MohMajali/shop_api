@@ -19,17 +19,15 @@ import java.util.List;
 
 public class ShortDiscAdapter extends RecyclerView.Adapter<ShortDiscAdapter.ViewHolder>{
 
-    Context context;
-    //ProductInfo productInfo;
 
     List<ProductInfo> list;
-
     ShortDiscBinding binding;
 
-    public ShortDiscAdapter(Context context , List<ProductInfo> productInfo){
+
+    /*public ShortDiscAdapter(Context context , List<ProductInfo> productInfo){
         this.context = context;
         this.list = productInfo;
-    }
+    }*/
 
     @NonNull
     @NotNull
@@ -43,33 +41,20 @@ public class ShortDiscAdapter extends RecyclerView.Adapter<ShortDiscAdapter.View
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         ProductInfo productInfo = list.get(position);
-
-        String title = productInfo.getTitle();
-        String shortDis = productInfo.getShortDesc();
-        boolean isOld = productInfo.bigVariation().get(0).getVariations().get(0).isIs_old();
-        String oldPrice = productInfo.getBigVariation().get(0).getVariations().get(0).getOld_price();
-        String orgPrice = productInfo.getBigVariation().get(0).getVariations().get(0).getPrice();
-        String color = productInfo.getBigVariation().get(0).getColor();
-        int textColor = Color.parseColor(color);
-
-        binding.title.setText(title);
-        binding.shortDisc.setText(shortDis);
-
-        if(isOld){
-            binding.oldPrice.setText(oldPrice);
-            binding.oldPrice.setPaintFlags(binding.oldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            binding.oldPrice.setTextColor(textColor);
-        } else {
-            binding.oldPrice.setText("Error");
-        }
-
-        binding.orginPrice.setText(orgPrice);
-
+        holder.bind(productInfo);
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        if(list != null){
+            return list.size();
+        }
+        return 0;
+    }
+
+    public void setPrice(List<ProductInfo> productInfos){
+        this.list = productInfos;
+        notifyDataSetChanged();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -79,6 +64,27 @@ public class ShortDiscAdapter extends RecyclerView.Adapter<ShortDiscAdapter.View
         public ViewHolder(@NonNull ShortDiscBinding itemView){
             super(itemView.getRoot());
             this.shortDiscBinding = itemView;
+        }
+
+        public void bind(ProductInfo productInfo){
+            String title = productInfo.getTitle();
+            String shortDis = productInfo.getShortDesc();
+            boolean isOld = productInfo.bigVariation().get(0).getVariations().get(0).isIs_old();
+            String oldPrice = productInfo.getBigVariation().get(0).getVariations().get(0).getOld_price();
+            String orgPrice = productInfo.getBigVariation().get(0).getVariations().get(0).getPrice();
+            String color = productInfo.getBigVariation().get(0).getColor();
+            int textColor = Color.parseColor(color);
+
+            binding.title.setText(title);
+            binding.shortDisc.setText(shortDis);
+
+            if(isOld){
+                binding.oldPrice.setText(oldPrice);
+                binding.oldPrice.setPaintFlags(binding.oldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                binding.oldPrice.setTextColor(textColor);
+            }
+
+            binding.orginPrice.setText(orgPrice);
         }
     }
 }

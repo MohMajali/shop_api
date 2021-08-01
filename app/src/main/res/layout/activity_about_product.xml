@@ -125,11 +125,14 @@
                             app:layout_constraintTop_toBottomOf="@+id/line" />
 
                         <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/options"
+                            android:id="@+id/sizes"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/sizesTxt" />
 
 
@@ -351,6 +354,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/rateBtn"
                     android:text="Rate"
+                    android:background="@drawable/rate_btn"
+                    app:backgroundTint = "@null"
                     android:layout_gravity="center"/>
 
                 <Button
@@ -358,6 +363,8 @@
                     android:layout_height="wrap_content"
                     android:text="Favorite"
                     android:id="@+id/favorite"
+                    android:background="@drawable/rate_btn"
+                    app:backgroundTint = "@null"
                     android:layout_gravity="center"/>
 
             </LinearLayout>

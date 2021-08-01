@@ -39,7 +39,6 @@ public class DetailsPresenter implements DetailsInterface.DetailsPresenter{
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         productDetailedView.onSuccess(response.body());
-                        productDetailedView.sizeSuccess(response.body().getData().bigVariation().get(0).getVariations().get(0));
                     } else {
                         productDetailedView.onFailure();
                     }

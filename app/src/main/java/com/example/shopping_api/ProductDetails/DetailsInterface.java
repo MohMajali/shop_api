@@ -13,7 +13,6 @@ public interface DetailsInterface {
         void onSuccess(DetailedProduct detailedProduct);
         void onFailure();
         void onError(Throwable t);
-        void sizeSuccess(Variation variation);
         void ratingSuccess(Rating rating);
         void favoriteSuccess(FavoriteData favoriteData);
 
