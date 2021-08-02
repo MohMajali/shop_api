@@ -1,3 +1,4 @@
+/*
 package com.example.shopping_api.Adapters;
 
 import android.content.Context;
@@ -61,3 +62,4 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.ViewHold
         }
     }
 }
+*/

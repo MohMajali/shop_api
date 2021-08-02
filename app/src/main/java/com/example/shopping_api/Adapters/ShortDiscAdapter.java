@@ -1,3 +1,4 @@
+/*
 package com.example.shopping_api.Adapters;
 
 import android.content.Context;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shopping_api.databinding.ShortDiscBinding;
+import com.example.shopping_api.moduls.BigVariation;
 import com.example.shopping_api.moduls.DetailedProduct;
 import com.example.shopping_api.moduls.ProductInfo;
 
@@ -22,12 +24,6 @@ public class ShortDiscAdapter extends RecyclerView.Adapter<ShortDiscAdapter.View
 
     List<ProductInfo> list;
     ShortDiscBinding binding;
-
-
-    /*public ShortDiscAdapter(Context context , List<ProductInfo> productInfo){
-        this.context = context;
-        this.list = productInfo;
-    }*/
 
     @NonNull
     @NotNull
@@ -52,8 +48,8 @@ public class ShortDiscAdapter extends RecyclerView.Adapter<ShortDiscAdapter.View
         return 0;
     }
 
-    public void setPrice(List<ProductInfo> productInfos){
-        this.list = productInfos;
+    public void setPrice(List<ProductInfo> productInfo){
+        this.list = productInfo;
         notifyDataSetChanged();
     }
 
@@ -88,3 +84,4 @@ public class ShortDiscAdapter extends RecyclerView.Adapter<ShortDiscAdapter.View
         }
     }
 }
+*/

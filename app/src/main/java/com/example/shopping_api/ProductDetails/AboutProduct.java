@@ -3,23 +3,30 @@ package com.example.shopping_api.ProductDetails;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
+import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
-import com.example.shopping_api.Adapters.DetailsAdapter;
+
 import com.example.shopping_api.Adapters.ImageProductAdapter;
 import com.example.shopping_api.Adapters.OptionsAdapter;
-import com.example.shopping_api.Adapters.ShortDiscAdapter;
 import com.example.shopping_api.R;
 import com.example.shopping_api.databinding.ActivityAboutProductBinding;
 import com.example.shopping_api.moduls.BigVariation;
 import com.example.shopping_api.moduls.DetailedProduct;
 import com.example.shopping_api.moduls.FavoriteData;
 import com.example.shopping_api.moduls.Feed;
+import com.example.shopping_api.moduls.Other;
 import com.example.shopping_api.moduls.ProductInfo;
 import com.example.shopping_api.moduls.Rating;
 import com.example.shopping_api.Adapters.SizeAdapter;
 import com.example.shopping_api.moduls.Variation;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,18 +36,17 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
     ActivityAboutProductBinding aboutProductBinding;
     DetailsPresenter detailsPresenter;
 
-    //Vairation vairation;
-
     List<ProductInfo> productInfo;
     List<Rating> ratings;
     ImageProductAdapter imageProductAdapter;
-    ShortDiscAdapter shortDiscAdapter;
-    DetailsAdapter detailsAdapter;
     OptionsAdapter optionsAdapter;
     SizeAdapter sizeAdapter;
+
+    String imgUrl;
     float rateValue;
 
     BigVariation bigVariation;
+    Variation variation;
     Feed feed;
 
     @Override
@@ -51,14 +57,14 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
         detailsPresenter = new DetailsPresenter(this);
 
         String id = getIntent().getStringExtra("arrival-id");
-        String imgUrl = getIntent().getStringExtra("img");
+        imgUrl = getIntent().getStringExtra("img");
         Picasso.with(getApplicationContext()).load(imgUrl).into(aboutProductBinding.bigImage);
         detailsPresenter.details(id);
 
         setUpImagesAdapter();
         setUpOptionAdapter();
         setUpSizeAdapter();
-        setUpShortDiscAdapter();
+
 
         aboutProductBinding.rate.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> rateValue = ratingBar.getRating());
 
@@ -84,17 +90,14 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
     private void setUpSizeAdapter(){
         sizeAdapter = new SizeAdapter();
         aboutProductBinding.sizes.setAdapter(sizeAdapter);
+        sizeAdapter.onclickItemListen(this);
     }
 
     private void setUpImagesAdapter(){
         imageProductAdapter = new ImageProductAdapter();
         aboutProductBinding.imageProdcute.setAdapter(imageProductAdapter);
     }
-
-    private void setUpShortDiscAdapter(){
-        shortDiscAdapter = new ShortDiscAdapter();
-        aboutProductBinding.shotDisc.setAdapter(shortDiscAdapter);
-    }
+    @SuppressLint("SetTextI18n")
     @Override
     public void onSuccess(DetailedProduct detailedProduct) {
 
@@ -102,20 +105,39 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
 
         productInfo = new ArrayList<>();
         productInfo.add(detailedProduct.getData());
-        //shortDiscAdapter.setShortDisc(productInfo);
+
+        aboutProductBinding.title.setText(detailedProduct.getData().getTitle());
+        aboutProductBinding.shortDisc.setText(detailedProduct.getData().getShortDesc());
+
+        String color = detailedProduct.getData().getBigVariation().get(0).getColor();
+        int colorText = Color.parseColor(color);
+
+        if(detailedProduct.getData().getBigVariation().get(0).getVariations().get(0).isIs_old()){
+            aboutProductBinding.oldPrice.setText(detailedProduct.getData().getBigVariation().get(0).getVariations().get(0).
+                    getOld_price());
+            aboutProductBinding.oldPrice.setPaintFlags(aboutProductBinding.oldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            aboutProductBinding.oldPrice.setTextColor(colorText);
+            aboutProductBinding.orginPrice.setText(detailedProduct.getData().getBigVariation().get(0).
+                    getVariations().get(0).getPrice() + detailedProduct.getData().getBigVariation().get(0).
+                    getVariations().get(0).getCurrenccy());
+        } else {
+            aboutProductBinding.orginPrice.setText(detailedProduct.getData().getBigVariation().get(0).
+                    getVariations().get(0).getPrice() + detailedProduct.getData().getBigVariation().get(0).getVariations().
+                    get(0).getCurrenccy());
+        }
+
+        aboutProductBinding.detailsTxt.setText(detailedProduct.getData().getDetails());
 
         ratings = new ArrayList<>();
         ratings.add(detailedProduct.getOther().getRating());
 
-        detailsAdapter = new DetailsAdapter(getApplicationContext() , productInfo);
-
         aboutProductBinding.imageProdcute.setAdapter(imageProductAdapter);
-        aboutProductBinding.details.setAdapter(detailsAdapter);
         optionsAdapter.setBigVariation(detailedProduct.getData().getBigVariation());
         sizeAdapter.setNewSize(detailedProduct.getData().bigVariation().get(0).getVariations());
 
         getFirstRating(detailedProduct.getOther().getRating());
-
+        getFavorite(detailedProduct.getOther());
+        showSheet(detailedProduct);
     }
 
     @Override
@@ -144,6 +166,37 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
         } else {
             aboutProductBinding.favorite.setText("Not Favorited");
         }
+    }
+
+    public void getFavorite(Other other){
+        if(other.isIs_favorite()){
+            aboutProductBinding.favorite.setText("Favorited");
+        } else {
+            aboutProductBinding.favorite.setText("Not Favorite");
+        }
+    }
+
+    public void showSheet(DetailedProduct detailedProduct){
+        aboutProductBinding.showSheet.setOnClickListener(v -> {
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(AboutProduct.this);
+            bottomSheetDialog.setContentView(R.layout.bottom_sheet);
+            bottomSheetDialog.setCanceledOnTouchOutside(true);
+
+            //init img, textViews
+            final ImageView imageView = bottomSheetDialog.findViewById(R.id.productImg);
+            final TextView textView = bottomSheetDialog.findViewById(R.id.productTitle);
+            final TextView textView1 = bottomSheetDialog.findViewById(R.id.description);
+            final Button button = bottomSheetDialog.findViewById(R.id.callBack);
+
+            Picasso.with(getApplicationContext()).load(imgUrl).into(imageView);
+            textView.setText(detailedProduct.getData().getTitle());
+            textView1.setText(detailedProduct.getData().getDetails());
+            button.setOnClickListener(v1 -> {
+                Toast.makeText(AboutProduct.this,"Hello",Toast.LENGTH_LONG).show();
+                bottomSheetDialog.dismiss();
+            });
+            bottomSheetDialog.show();
+        });
     }
 
     public void getFirstRating(Rating rating){
@@ -213,12 +266,19 @@ public class AboutProduct extends AppCompatActivity implements DetailsInterface.
             bigVariation = optionsAdapter.getBigVariation(position);
             sizeAdapter.setNewSize(bigVariation.getVariations());
             imageProductAdapter.setImages(bigVariation.getVariations().get(0));
+            aboutProductBinding.orginPrice.setText(bigVariation.getVariations().get(0).getPrice() + bigVariation.getVariations().
+                    get(0).getCurrenccy());
 
-            shortDiscAdapter.setPrice(productInfo);
+            sizeAdapter.selectedPosition = 0;
+            sizeAdapter.notifyDataSetChanged();
 
-        } else if(adapter instanceof SizeAdapter){
-            Toast.makeText(getApplicationContext(),String.valueOf(position),Toast.LENGTH_LONG).show();
-            Log.i("Clicked", "HIIIIII");
+        }
+        if(adapter instanceof SizeAdapter){
+
+            variation = sizeAdapter.getVariation(position);
+
+            sizeAdapter.selectedPosition = position;
+            sizeAdapter.notifyDataSetChanged();
         }
 
     }

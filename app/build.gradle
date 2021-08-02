@@ -52,4 +52,5 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation "androidx.cardview:cardview:1.0.0"
     compile 'com.github.mathiazhagan01:DrawableColorChange:1.4'
+    implementation 'com.google.android.material:material:1.1.0'
 }

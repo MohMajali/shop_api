@@ -26,6 +26,7 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder> {
     List<Variation> list;
     OnClick onClickItem;
     Variation variation;
+    public int selectedPosition = -1;
 
 
     @NonNull
@@ -42,7 +43,7 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         variation = list.get(position);
-       holder.bind(variation);
+        holder.bind(variation , selectedPosition);
     }
 
     @Override
@@ -59,6 +60,10 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder> {
 
     }
 
+    public void onclickItemListen(OnClick onClickItem){
+        this.onClickItem = onClickItem;
+    }
+
     public Variation getVariation(int position){
         return list.get(position);
     }
@@ -68,8 +73,6 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         SizeListBinding sizeListBinding;
         OnClick onClickItem;
-        Context context;
-        SharedPreferences sp;
 
         public ViewHolder(@NonNull SizeListBinding sizeListBinding , OnClick onClickItem) {
             super(sizeListBinding.getRoot());
@@ -77,13 +80,24 @@ public class SizeAdapter extends RecyclerView.Adapter<SizeAdapter.ViewHolder> {
             this.sizeListBinding = sizeListBinding;
             this.onClickItem = onClickItem;
             itemView.setOnClickListener(this);
+
         }
 
-        public void bind(Variation variation){
+        public void bind(Variation variation , int selectedPosition){
             int color = Color.parseColor("#9c093a");
+            int color2 = Color.parseColor("#808080");
             String size = variation.getSize();
             sizeListBinding.size.setText(size);
-            sizeListBinding.size.setTextColor(color);
+
+            if(selectedPosition == -1){
+                sizeListBinding.size.setTextColor(color);
+            } else if(selectedPosition == getAdapterPosition()){
+                sizeListBinding.size.setTextColor(color);
+            } else {
+                sizeListBinding.size.setTextColor(color2);
+                Log.i("position" , String.valueOf(selectedPosition));
+            }
+
         }
 
         @Override

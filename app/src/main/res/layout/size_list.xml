@@ -6,18 +6,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="5dp"
+        android:descendantFocusability="blocksDescendants"
         >
 
-        <Button
+        <!--<Button
             android:id="@+id/size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/size_btn"
+
             android:padding="2dp"
             android:text="Size"
-            app:backgroundTint="@null"
-            />
+
+            />-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/size"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:text="Size"
+            android:background="@drawable/size_btn"/>
     </LinearLayout>
 
 </layout>
